@@ -20,3 +20,12 @@ trying to add record and play functionality by looking at  record play exampl ap
 25/4/16
 -finding peaks in each frame using a length 5 mask using simple technique
 -added record and play buttons
+- was crashing
+-so commented out smoothign section and worked fine with buttons
+- wrong actually works with smoothing but not with peak finder!
+-think issue is with not initiiaslsing peakFreq to zero
+- sometimes just need to restart mplab *sigh
+-memory issues with saving peak frequencies and not restarting the count at the right time i think
+-for some reason initialising i and j in the dma makes them work better as counters i.e not nonsensical values
+-finding too many peaks so need more smoothing
+-somethign wrong with the peak freq storage device

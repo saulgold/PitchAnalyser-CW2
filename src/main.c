@@ -68,7 +68,7 @@ float getFrequency(int samplingRate, int frameSize, int FFTPosition){
 }
 	float testFrequency = 0;
 	
-#define averageFrame 5
+#define averageFrame 15
 int averageMidPoint =averageFrame- averageFrame/2;
 int totalAvg;
 /*masks must be odd*/
@@ -76,16 +76,19 @@ int totalAvg;
 int peakMaskMid = peakMask- peakMask/2;
 int play;
 int record;
-//int peakFrequencies[30][2];
+int peakFrequencies[2][11]__attribute__ ((space(ymemory),far));
+int i __attribute__((space(dma)));
+int j __attribute__((space(dma)));
 int main(void)
 
 {
-	int i;
-	int j;
+
 	int max;
 	int maxPosition=0;
 	int x=0;
 	ex_sask_init( );
+	
+
 
 	//Initialise Audio input and output function
 	ADCChannelInit	(pADCChannelHandle,adcBuffer);			
@@ -101,6 +104,12 @@ int main(void)
    	max = 0;
 		maxPosition =0;
 		float freq;
+		
+	for(i=0;i<10;i++){
+		for(j=0;j<2;j++){
+			peakFrequencies[j][i]=0;
+		}
+	}
 		
 	while(1)
 	{   
@@ -127,24 +136,28 @@ int main(void)
 					compXfilteredAbs[i] = pow(compX[i].real,2) + pow(compX[i].imag,2);	
 			}	
 		
-//			/*smooth signal by taking rolling average*/
-//			for(i=0;i<FRAME_SIZE/2-averageMidPoint;i++){
-//				totalAvg=0;
-//				for(j=i;j<(i+averageFrame);j++){
-//					totalAvg += compXfilteredAbs[j];
-//				}
-//				compXSmoothed[i +averageMidPoint] = totalAvg; /*no need to divide if dont divide all*/
-//			}
+			/*smooth signal by taking rolling average*/
+			for(i=0;i<FRAME_SIZE/2-averageMidPoint;i++){
+				totalAvg=0;
+				for(j=i;j<(i+averageFrame);j++){
+					totalAvg += compXfilteredAbs[j];
+				}
+				compXSmoothed[i +averageMidPoint] = totalAvg; /*no need to divide if dont divide all*/
+			}
 			/*find multiple peaks*/
 			
-			
-//			for(i=peakMaskMid;i<(FRAME_SIZE/2-peakMaskMid);i++){
-//				if((compXSmoothed[i+peakMask-peakMaskMid]<compXSmoothed[i]) && (compXSmoothed[i-peakMask+peakMaskMid]<compXSmoothed[i])){
-//					peakFrequencies[x][0] = i;
-//					peakFrequencies[x][1]=compXSmoothed[i];
-//					x++;
-//				}	
-//			}
+
+			for(i=peakMaskMid;i<(FRAME_SIZE/2-peakMaskMid);i++){
+				if((compXSmoothed[i+peakMask-peakMaskMid]<compXSmoothed[i]) && (compXSmoothed[i-peakMask+peakMaskMid]<compXSmoothed[i])){
+
+					peakFrequencies[0][x] = i;
+					peakFrequencies[1][x]=compXSmoothed[i];
+					x++;
+					if(x>10){
+						x=0;
+					}
+				}	
+			}
 			//find the peak frequency	
 			for(i = 0; i<FRAME_SIZE/2;i++){
 					if(compXfilteredAbs[i] > max){
@@ -223,6 +236,7 @@ int main(void)
 			play=0;
 			RED_LED = 1;
 			GREEN_LED=1;
+			x=0;
 			for(i = 0;i <FRAME_SIZE;i++){
 				generatedSignal[i]=0;
 			}
