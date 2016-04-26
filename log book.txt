@@ -1,0 +1,22 @@
+22/4/16
+trying to add record and play functionality by looking at  record play exampl app provided by mplab
+
+23/4/16
+-issues with intialising variables for loop, i and j keep getting -987 or random negative values
+-tried initialisein them in the dma and seemded to work
+-no sound kind of records but not properly...
+-maximum audio storage is 30 lines of 128 length audio sample as a char, so using the g711 compression
+-this increses possible length by 3 times.
+-not sure how long this is.
+25/4/16
+-after klooking at the forums apararntly the libraiesfor writing to flash are incorrect
+-found a correction by another user to the libraries so now trying that
+-dosent work
+-tried differrent way of accessing the eeeprom using drect spi communicaiton byut alsdo didnt work
+- now trying different method.
+-storing peaks from each frame rather than entire frame
+-smoothing compabs signal with moving average
+-testing differnce mask sizes - need to confirm technique workls porperly
+25/4/16
+-finding peaks in each frame using a length 5 mask using simple technique
+-added record and play buttons
