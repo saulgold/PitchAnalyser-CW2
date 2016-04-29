@@ -25,7 +25,16 @@ trying to add record and play functionality by looking at  record play exampl ap
 - wrong actually works with smoothing but not with peak finder!
 -think issue is with not initiiaslsing peakFreq to zero
 - sometimes just need to restart mplab *sigh
+26/4/16
 -memory issues with saving peak frequencies and not restarting the count at the right time i think
 -for some reason initialising i and j in the dma makes them work better as counters i.e not nonsensical values
 -finding too many peaks so need more smoothing
 -somethign wrong with the peak freq storage device
+27/4/16
+-smoothed fractional is giving negstive results so need to asjust formula
+-fixed, issues with the average mask definitiion
+-now iwll compare smoothed data in spread sheet to make sure it's wokring 
+-dont actually need a smoothed signal...
+-find peaks works!
+-but dont need all the peaks, need to delete unecessARY PEAKS
+-can do this by delecting peaks below a cretain percentage of the max...
